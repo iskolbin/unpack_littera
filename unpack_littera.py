@@ -12,12 +12,12 @@ def kernings_list_to_dict( kernings_list ):
 
 def process_littera( dom ): return {
     'chars': dict( [(unichr( int ( char.attrib['id'] )), ( dict([( k, xint(v), ) for k, v in char.attrib.items()]))) for char in dom.iter('char') if char.attrib['width'] > 0] ),
-    'kernings': kernings_list_to_dict( [dict((k,int(v)) for k, v in kerning.attrib.items()) for kerning in dom.iter('kerning')] ),
+    'kernings': dom.find('kernings') != None and kernings_list_to_dict( [dict((k,int(v)) for k, v in kerning.attrib.items()) for kerning in dom.iter('kerning')] ),
     'pages': [dict((k,xint(v)) for k, v in page.attrib.items()) for page in dom.iter('page')],
     'common': dict((k,xint(v), ) for k, v in dom.find('common').attrib.items()),
     'info': dict((k,xint(v)) for k, v in dom.find('info').attrib.items()),
     'charscount': xint( dom.find('chars').attrib['count']),
-    'kerningscount': xint( dom.find('kernings').attrib['count'] ),
+    'kerningscount': dom.find('kernings') != None and xint( dom.find('kernings').attrib['count'] ),
 }
 
 def default_get_path( littera, char, charinfo ):
